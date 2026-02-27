@@ -64,6 +64,11 @@ const swaggerOptions = {
     servers: [
       {
         url: `https://order-processing-app-nedk.onrender.com`,
+        description: "Production Server"
+      },
+      {
+        url: `http://localhost:${PORT}`,
+        description: "Local Development Server"
       },
     ],
     components: {
