@@ -95,8 +95,7 @@ npm start
 After starting the server, open:
 
 
-http://localhost:5000/api-docs
-
+https://order-processing-app-nedk.onrender.com
 
 Swagger provides interactive API documentation where you can test all endpoints.
 
