@@ -1,32 +1,31 @@
 {
   "name": "order-processing-app",
   "version": "1.0.0",
+  "description": "Order Processing Backend API with authentication, products, cart, orders, and payments",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
-    "audit": "^0.0.6",
-    "axios": "^1.13.4",
-    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
     "colors": "^1.4.0",
     "cors": "^2.8.6",
     "dotenv": "^17.2.4",
     "express": "^5.2.1",
     "express-rate-limit": "^8.2.1",
-    "express-session": "^1.19.0",
     "express-validator": "^7.3.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.1.6",
     "multer": "^2.0.2",
     "nodemailer": "^8.0.1",
-    "passport": "^0.7.0",
-    "passport-local": "^1.0.0",
     "pdfkit": "^0.17.2",
-    "stream-buffers": "^3.0.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "winston": "^3.19.0"
   },
   "devDependencies": {

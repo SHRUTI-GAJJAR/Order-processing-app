@@ -13,9 +13,9 @@ const productRoutes = require('./src/routes/productRoutes');
 const orderRoutes = require('./src/routes/orderRoutes');
 const paymentRoutes = require('./src/routes/paymentRoutes');
 const cartRoutes = require('./src/routes/cartRoutes');
-
-
 const app = express();
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
 // Connect to MongoDB
 connectDB();
@@ -48,7 +48,44 @@ app.use(
 // Serve static files
 app.use('/uploads', express.static('uploads'));
 
-// Test route
+// --------------------
+// Swagger Setup
+// --------------------
+const PORT = process.env.PORT || 5000;
+
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Order Processing API',
+      version: '1.0.0',
+      description: 'API documentation for Order Processing App',
+    },
+    servers: [
+      {
+        url: `http://localhost:${PORT}`,
+      },
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+  },
+  apis: ['./src/routes/*.js'],
+};
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// --------------------
+// Test Route
+// --------------------
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
@@ -64,7 +101,6 @@ app.use('/api/cart', cartRoutes);
 // Error Middleware
 app.use(errorMiddleware);
 
-const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   logger.info(`Server running on port ${PORT}`.green);
 });
