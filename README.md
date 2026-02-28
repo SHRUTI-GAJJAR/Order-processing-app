@@ -1,31 +1,36 @@
 # 🚀 Order Processing App (Backend API)
 
-A complete backend REST API for an Order Processing System built with Node.js, Express, and MongoDB.  
-This project includes authentication, role-based authorization, product management, cart, orders, payments, and Swagger documentation.
+A scalable and secure backend system built with Node.js, Express, and MongoDB for managing users, products, carts, orders, and payments.
+
+This project demonstrates real-world backend architecture, including authentication, role-based access control, email notifications, PDF receipt generation, and full Swagger documentation.
 
 ---
 
 ## ✨ Features
 
-- 🔐 User Registration & Login (JWT Authentication)
+- 🔐 JWT Authentication System
 
-- 👥 Role-Based Access Control (Admin & User)
+👥 Role-Based Access Control (User & Admin)
 
-- 📦 Product CRUD with Image Upload
+📦 Product Management with Image Upload
 
-- 🛒 Shopping Cart System
+🛒 Shopping Cart System
 
-- 📑 Order Management
+📑 Order Lifecycle Management
 
-- 💳 Payment Integration
+💳 Payment Handling
 
-- ✅ Input Validation using express-validator
+📧 Email Notifications (Welcome, OTP, Order Updates, Refunds)
 
-- 🛡 Security with Helmet & Rate Limiting
+🔑 Forgot Password with OTP Verification
 
-- ⚙ Centralized Error Handling Middleware
+🧾 PDF Payment Receipt Generation
 
-- 📖 API Documentation using Swagger (OpenAPI)
+🛡 Security Best Practices (Helmet, Rate Limiting)
+
+⚙ Centralized Error Handling
+
+📖 Fully Documented API using Swagger (OpenAPI)
 
 ---
 
@@ -35,10 +40,13 @@ This project includes authentication, role-based authorization, product manageme
 - Express.js
 - MongoDB & Mongoose
 - JWT (Authentication)
-- Multer (File Upload)
-- Swagger (API Docs)
+- Nodemailer (Email Service)
+- PDFKit (PDF Generation)
+- Multer (File Uploads)
+- Swagger (API Documentation)
 - Helmet (Security)
 - Winston (Logging)
+- express-validator (Validation)
 
 ---
 
@@ -54,9 +62,10 @@ src/
 └── utils/
 logs/
 uploads/
+.gitignore
 app.js
-
-
+README.md
+package.json
 
 ---
 
@@ -82,6 +91,9 @@ Create a `.env` file in the root directory and add:
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_secret_key
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_app_password
+ADMIN_SECRET=your_admin_secret
 
 
 ### 4️⃣ Run the Project
@@ -140,6 +152,26 @@ Authorization: Bearer <your_token>
 - ⚠ Centralized error handling middleware
 
 - 👮 Role-based authorization for protected resources
+
+---
+
+📧 Email System
+
+Automatic emails are sent for:
+
+User Registration
+
+OTP for Password Reset
+
+Order Placed
+
+Order Accepted
+
+Order Cancelled
+
+Refund Processed
+
+Payment Receipt (PDF Attachment)
 
 ---
 

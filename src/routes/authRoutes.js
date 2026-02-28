@@ -3,6 +3,7 @@ const router = express.Router();
 const { register, login,logout, forgotPassword, resetPassword} = require('../controllers/authController');
 const { body } = require('express-validator');
 const validateRequest = require('../middlewares/validateRequest');
+const { protect } = require('../middlewares/authMiddleware');
 
 /**
  * @swagger
@@ -142,9 +143,10 @@ router.post(
  *     responses:
  *       200:
  *         description: User logged out successfully
+ *      401:
+ *        description: Unauthorized (missing or invalid token)
  */
-// Logout route (implementation can be done in authController)
-router.post('/logout', logout);
+router.post('/logout', protect, logout);
 
 /**
  * @swagger
