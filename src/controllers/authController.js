@@ -1,7 +1,8 @@
 const generateToken = require('../utils/generateToken');
 const User = require('../models/User');
 const { hashPassword, comparePassword } = require('../utils/hashPassword');
-const { sendRegisterEmail } = require('../services/emailService');
+const crypto = require('crypto');
+const { sendRegisterEmail , sendOtpEmail } = require('../services/emailService');
 
 // Secret key to allow admin creation (for testing)
 const ADMIN_SECRET = process.env.ADMIN_SECRET || 'myadminkey';
@@ -100,4 +101,103 @@ const login = async (req, res, next) => {
   }
 };
 
-module.exports = { register, login };
+// =======================
+// LOGOUT USER
+// =======================
+const logout = async (req, res) => {
+  try {
+    // If using cookies (optional future use)
+    res.clearCookie('token');
+
+    return res.status(200).json({
+      success: true,
+      message: 'User logged out successfully',
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Logout failed',
+      error: error.message,
+    });
+  }
+};
+
+// =======================
+// FORGOT PASSWORD
+// =======================
+const forgotPassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user)
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    user.otp = otp;
+    user.otpExpiry = Date.now() + 10 * 60 * 1000; // 10 minutes
+    await user.save();
+
+    await sendOtpEmail(user.email, otp);
+
+    res.json({
+      success: true,
+      message: 'OTP sent to your email',
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+// =======================
+// RESET PASSWORD
+// =======================
+const resetPassword = async (req, res, next) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user)
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+
+    if (!user.otp || user.otp !== otp)
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid OTP',
+      });
+
+    if (user.otpExpiry < Date.now())
+      return res.status(400).json({
+        success: false,
+        message: 'OTP expired',
+      });
+
+    const hashedPassword = await hashPassword(newPassword);
+    user.password = hashedPassword;
+
+    user.otp = undefined;
+    user.otpExpiry = undefined;
+
+    await user.save();
+
+    res.json({
+      success: true,
+      message: 'Password reset successfully',
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { register, login , logout,forgotPassword, resetPassword };

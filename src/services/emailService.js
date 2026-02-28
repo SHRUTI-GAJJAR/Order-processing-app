@@ -241,10 +241,7 @@ Refund amount: ${refundAmount}`,
 // Function to generate PDF receipt for an order
 const generateReceiptPDF = (order) => {
   return new Promise((resolve, reject) => {
-    const PDFDocument = require('pdfkit');
-    const streamBuffers = require('stream-buffers');
-
-    const doc = new PDFDocument({ margin: 50 });
+        const doc = new PDFDocument({ margin: 50 });
     const bufferStream = new streamBuffers.WritableStreamBuffer();
 
     doc.pipe(bufferStream);
@@ -402,6 +399,31 @@ const sendPaymentReceiptEmail = async (to, order) => {
   }
 };
 
+// =======================
+// SEND OTP EMAIL
+// =======================
+const sendOtpEmail = async (to, otp) => {
+  try {
+    await transporter.sendMail({
+      from: `"FastOrder API" <${process.env.EMAIL_USER}>`,
+      to,
+      subject: 'Password Reset OTP - FastOrder',
+      html: `
+        <div style="font-family: Arial; padding:20px;">
+          <h2>Password Reset Request 🔐</h2>
+          <p>Your OTP for password reset is:</p>
+          <h1 style="color:#2563eb;">${otp}</h1>
+          <p>This OTP will expire in 10 minutes.</p>
+        </div>
+      `
+    });
+
+    logger.info(`OTP email sent to ${to}`);
+  } catch (error) {
+    logger.error(`Failed to send OTP email: ${error.message}`);
+  }
+};
+
 module.exports = {
   sendRegisterEmail,
   sendOrderCreatedEmail,
@@ -409,5 +431,6 @@ module.exports = {
   sendOrderCancelledEmail,
   sendOrderRefundEmail,
   generateReceiptPDF,
-  sendPaymentReceiptEmail
+  sendPaymentReceiptEmail,
+  sendOtpEmail
 };
