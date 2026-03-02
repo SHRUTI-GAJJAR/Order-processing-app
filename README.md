@@ -90,10 +90,12 @@ Create a `.env` file in the root directory and add:
 
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
+JWT_SECRET=your_super_secret_key
 EMAIL_USER=your_email@gmail.com
-EMAIL_PASS=your_app_password
-ADMIN_SECRET=your_admin_secret
+EMAIL_PASS=your_gmail_app_password
+RATE_LIMIT_WINDOW=15
+RATE_LIMIT_MAX=100
+ADMIN_SECRET=your_admin_secret_key
 
 
 ### 4️⃣ Run the Project
